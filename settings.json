@@ -1,0 +1,13 @@
+{
+	"emojis":{ 
+		"load":"<a:loading:918026735759544320>",
+		"success":" <:success:918031461410562058>",
+		"fail":"<:fail:918031461481840660>",
+		"warn":"<:warn:918031461817389076>",
+		"info":"<:info:918031461188251719>"
+	},
+	"ownerids":["813545145039192084"],
+	"support": "[bot server](https://discord.gg/H5d5u35ggF)",
+	"website": "[Website](https://github.com/spongeyboi/barsbot)",
+	"source-code":"[Source code](https://github.com/spongeyboi/barsbot)"
+}
