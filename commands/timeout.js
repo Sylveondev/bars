@@ -88,7 +88,7 @@ module.exports = {
 		interaction.guild.members.cache.get(user.id).timeout(timefor,`(${interaction.user.tag}) ${reasonstring}`)
 
 		interaction.followUp({content:'Hey you, this command is a discord beta feature, if you have suggestions, post it on bars\'s support server',embeds:[
-			{description:`${user} has been timed out for ${ms(timefor)}.  \`${thenewpid||"Unknown"}\``,color:'ORANGE'}
+			{description:`${user} has been timed out for ${ms(timefor,{long:true})}.  \`${thenewpid||"Unknown"}\``,color:'ORANGE'}
 		]})
 
 		if (setting){
@@ -100,6 +100,7 @@ module.exports = {
 								title:`Timeout`,
 								fields:[{name:'Member',value:`${user}`,inline:true},
 				{name:'Reason',value:reasonstring,inline:true},
+				{name:'Time',value:ms(timefor,{long:true}),inline:true},
 				{name:'Moderator',value:`${interaction.member}`,inline:true},
 				{name:'Punishment ID',value:`${thenewpid}`,inline:true}],
 				color:`ORANGE`,
