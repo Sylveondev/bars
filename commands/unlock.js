@@ -24,7 +24,7 @@ module.exports = {
 					channel = interaction.options.getChannel('channel') || interaction.channel
 					reason = interaction.options.getString('reason') || "no reason..."
 					try{
-						channel.permissionOverwrites.edit(interaction.guild.roles.everyone,{SEND_MESSAGES:true})
+						channel.permissionOverwrites.edit(interaction.guild.roles.everyone,{SEND_MESSAGES:null})
 						.then(()=>{interaction.followUp(`${emojis.success} | ${channel} has been unlocked for ${reason}`)})
 					}catch(e){
 						console.log(`did not unlock ${channel.id} because`,e)
@@ -67,7 +67,7 @@ function completion(interaction,i,channels,reason){
 
 function unlocks(interaction,c) {
 	interaction.guild.channels.fetch(c).then((channel) => {
-								channel.permissionOverwrites.edit(interaction.guild.roles.everyone,{SEND_MESSAGES:true})
+								channel.permissionOverwrites.edit(interaction.guild.roles.everyone,{SEND_MESSAGES:null})
 								.then(()=>{
 									
 									if (channel.id !== interaction.channel.id){

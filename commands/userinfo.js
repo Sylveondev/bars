@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription('Shows info on a user')
 		.addUserOption((option) => option.setName('user').setDescription('The user to search').setRequired(true)),
 	async execute(interaction) {
-		interaction.deferReply()
+		await interaction.deferReply()
 		var user = await interaction.options.getUser('user')
 		var guildmember = await interaction.guild.members.fetch(user.id).catch(()=>{})
 		if (guildmember){
@@ -32,7 +32,7 @@ module.exports = {
 					icon_url:user.displayAvatarURL({dynamic:true})
 				},
 				description:`● **ID:** \`${user.id}\``+
-				`\n● **Joined Discord:** <t:1614034677> (<t:1614034677:R>)`+
+				`\n● **Joined Discord:** <t:${parseInt(user.createdTimestamp / 1000, 10)}>(<t:${parseInt(user.createdTimestamp / 1000, 10)}:R>)`+
 				`\n● **Avatar:** [\`Click here\`](${user.displayAvatarURL({dynamic:true})})`+
 				`\n● **In server?:** :x: No`,
 				color:'BLACK',
