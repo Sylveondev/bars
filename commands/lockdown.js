@@ -55,16 +55,65 @@ module.exports = {
 					
 				break;
 			}
-		}
-}
+		},
+	prefixname: 'lockdown',
+	prefixdescription: 'Locks a channel or the server',
+	async prefixed(client,message,args) {
+		if (!message.member.permissions.has('MANAGE_CHANNELS')) return message.reply(`${emojis.warn} | No permissions to use this command.`)
+			const setting = args[0]
+			let channel
+			let reason
+			switch(setting){
+				case 'all':
+					reason = args.slice(1).join(" ") || "no reason..."
 
-function completion(interaction,i,channels,reason){
-	if ((i+1) === channels.length){
-		interaction.followUp(`${emojis.success} | The server has been lock for ${reason}`)
+					message.reply(`${emojis.warn} | Lockdown started`)
+					
+					const setting = await settingschema.findOne({_id:message.guild.id})
+
+					if (!setting) return message.reply(`${emojis.warn} | No channels were set to lockdown.`)
+
+					if (!setting.lockdownchannel) return message.reply(`${emojis.warn} | No channels were set to lockdown.`)
+
+					var lockdownchannel = setting.lockdownchannel.slice().trim().split(/ +/)
+
+					console.log('locking',lockdownchannel)
+					for (let i = 0; i < lockdownchannel.length; i++) {
+						setTimeout(function timer() {
+							locks(message,lockdownchannel[i],true)
+							completion(message,i,lockdownchannel,reason,true)
+						}, i * 1500);
+					}
+					
+					
+				break;
+				default:
+					channel = message.mentions.channels.first() || message.channel
+					if (message.mentions.channels.first()){ args.shift() }
+					reason = args.join(" ") || "no reason..."
+					try{
+						channel.permissionOverwrites.edit(message.guild.roles.everyone,{SEND_MESSAGES:false})
+						.then(()=>{message.reply(`${emojis.success} | ${channel} has been locked for ${reason}`)})
+					}catch(e){
+						console.log(`did not lock ${channel.id} because`,e)
+						message.reply(`${emojis.fail} | An error occured`)
+					}
+			}
 	}
 }
 
-function locks(interaction,c) {
+function completion(interaction,i,channels,reason,prefix){
+	if (prefix){
+	if ((i+1) === channels.length){
+		interaction.reply(`${emojis.success} | The server has been lock for ${reason}`)
+	}}else{
+	if ((i+1) === channels.length){
+		interaction.followUp(`${emojis.success} | The server has been lock for ${reason}`)
+	}}
+}
+
+function locks(interaction,c,prefix) {
+
   interaction.guild.channels.fetch(c).then((channel) => {
 								channel.permissionOverwrites.edit(interaction.guild.roles.everyone,{SEND_MESSAGES:false})
 								.then(()=>{

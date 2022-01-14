@@ -14,7 +14,7 @@
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "0.1.0-canary.0",
     "discord-api-types": "^0.24.0",
-    "discord.js": "git+https://github.com/discordjs/discord.js.git",
+    "discord.js": "^13.5.1",
     "express": "^4.17.1",
     "leeks.js": "^0.2.4",
     "mongoose": "^5.13.13",

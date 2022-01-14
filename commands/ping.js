@@ -5,6 +5,12 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Ping to discord'),
 	async execute(interaction) {
-		await interaction.reply(`:ping_pong: | Pinged. Looks like no errors`);
+		await interaction.reply(`:ping_pong: | Pong! \`${Math.round(client.ws.ping)}\`ms`);
 	},
+	prefixname: 'ping',
+	prefixdescription: 'Bot ping',
+	async prefixed(client,message,args) {
+		await message.reply({allowedMentions:{repliedUser:false},content:`:ping_pong: | Pong! \`${Math.round(client.ws.ping)}\`ms`});
+	}
+	
 };

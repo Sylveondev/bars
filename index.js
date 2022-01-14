@@ -4,13 +4,17 @@ const Discord = require('discord.js')
 const client = new Discord.Client({intents:['GUILDS','GUILD_MESSAGES','GUILD_MEMBERS','DIRECT_MESSAGES']})
 
 client.commands = new Discord.Collection();
+client.prefixcommands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
+	client.prefixcommands.set(command.data.prefixname, command);
 }
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -39,6 +43,34 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+client.on('messageCreate',async(message) => {
+		if (message.author.bot || !message.guild) return;
+
+		const prefix = "bars."
+		if (!message.content.startsWith(prefix)) return;
+
+		const args = message.content.slice(prefix.length).trim().split(/ +/)
+		const commandname = args.shift().toLowerCase()
+
+		console.log('commandname',commandname)
+
+		const command = client.commands.get(commandname);
+
+		if (message.content == `<@!${message.guild.me.id}> slashcommands`||message.content == `<@${message.guild.me.id}> slashcommands`){
+			require('../deploycmds').register(message.guild.id)
+			message.reply(`${emojis.success} | Attempting to refresh slash commands`)
+		}
+		
+	if (!command) return;
+
+	try {
+		await command.prefixed(client,message,args);
+	} catch (error) {
+		console.error(error);
+		await message.reply({ content: 'There was an error while executing this command!'});
+	}		
+})
 
 
 client.login(process.env.token)
@@ -106,4 +138,5 @@ require("./handlers/databasehandler").connect(process.env.mongodburl,process.env
 
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error.message);
+	console.log("Stack",error.stack)
 });

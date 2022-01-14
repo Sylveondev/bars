@@ -40,4 +40,9 @@ module.exports = {
 			}]})
 		}
 	},
+	prefixname: 'userinfo',
+	prefixdescription: 'Gets info on a user',
+	async prefixed(client,message,args) {
+	
+	}
 };

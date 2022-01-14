@@ -72,4 +72,9 @@ module.exports = {
 			break;
 		}
 	},
+	prefixname: 'settings',
+	prefixdescription: 'Changes bot settings',
+	async prefixed(client,message,args) {
+		message.reply(`:x: | Settings can only be changed with slash commands.`)
+	}
 };

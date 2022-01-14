@@ -56,7 +56,12 @@ module.exports = {
 					
 				break;
 			}
-		}
+		},
+		prefixname: 'unlock',
+	prefixdescription: 'Unlocks a channel or server',
+	async prefixed(client,message,args) {
+	
+	}
 }
 
 function completion(interaction,i,channels,reason){

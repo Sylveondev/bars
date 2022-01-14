@@ -105,4 +105,9 @@ module.exports = {
 			}
 		}
 	},
+	prefixname: 'untimeout',
+	prefixdescription: 'Untimes out (unmutes) a user',
+	async prefixed(client,message,args) {
+	
+	}
 };

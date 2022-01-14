@@ -112,4 +112,9 @@ module.exports = {
 			}
 		}
 	},
+	prefixname: 'timeout',
+	prefixdescription: 'Times out (mutes) a user',
+	async prefixed(client,message,args) {
+	
+	}
 };

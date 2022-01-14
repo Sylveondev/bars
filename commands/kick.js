@@ -103,4 +103,99 @@ module.exports = {
 			}
 		}
 	},
+	prefixname: 'kick',
+	prefixdescription: 'Kicks a user from the guild',
+	async prefixed(client,message,args) {
+		const finduser = require('../handlers/userfetcher')
+		const user = await finduser(client, args[0], message)
+		const reasonstring = args.slice(1).join(" ")||"None specified"
+		const inf = await infschema.findOne({_id:user.id,_guildid:message.guild.id})
+		const setting = await settingschema.findOne({_id:message.guild.id})
+		let thenewpid = Math.floor(Math.random()*1000000000000000)
+		let type = []
+		let length = []
+		let moderator = []
+		let reason = []
+		let pid = []
+		if (inf){
+			if (inf.type){
+				inf.type.split("|").forEach(i=>{type.push(i)})
+				inf.reason.split("|").forEach(i=>{reason.push(i)})
+				inf.time.split("|").forEach(i=>{length.push(i)})
+				inf.moderator.split("|").forEach(i=>{moderator.push(i)})
+				inf.pid.split("|").forEach(i=>{pid.push(i)})
+			}
+		}
+
+		type.push(`kick`)
+		length.push('N/A')
+		moderator.push(`${message.member}`)
+		reason.push(`${reasonstring}`)
+		pid.push(thenewpid)
+
+		if (setting){
+			if (!message.member.permissions.has('BAN_MEMBERS')){if (!message.member.roles.cache.has(setting.modrole)) return message.reply(':x: | No permissions to use this command')}
+		}else{
+			if (!message.member.permissions.has('BAN_MEMBERS')) return message.reply(':x: | No permissions to use this command')
+		}
+
+		var validuser = await message.guild.members.fetch(user.id)
+		.catch(()=>{})
+		if (!validuser) return message.reply(`:x: | That user isn't in the server`)
+		
+		if (user.id === message.member.id)
+		return message.reply(`:x: | You wouldn't want to do that on yourself.`)
+
+		const owner = await message.guild.fetchOwner();
+		if (user.id === owner.id)
+		return message.reply(`:x: | You can't kick the owner, silly goose.`)
+		if(validuser.roles.highest.position >= message.member.roles.highest.position&&owner.id!==message.member.id)
+		return message.reply(`:x: | This user cannpt be kicked because they have the same role or higher than you.`)
+
+		if (user.kickable) return message.reply(`:x: | This user cannot be kicked`)
+
+		await infschema.findOneAndUpdate({_id:user.id,_guildid:message.guild.id},{_id:user.id,_guildid:message.guild.id,type:type.join(`|`),time:length.join('|'),reason:reason.join('|'),moderator:moderator.join('|'),pid:pid.join('|')},{upsert:true})
+		.catch(()=>{message.reply(`:warning: | Oops, something went wrong while saving to the database. Continuing anyway`)})
+
+		user.send({embeds:[{
+			author:{name:`${client.user.tag}`,icon_url:client.user.displayAvatarURL()},
+			description:`Punishments updated in ${message.guild.name}`,
+			fields:[
+				{name:'Type',value:'kick',inline:true},
+				{name:'Reason',value:reasonstring,inline:true},
+				{name:'Moderator',value:`${message.member}`,inline:true},
+				{name:'Punishment ID',value:`${thenewpid}`,inline:true}
+			],
+			footer:{text:`You now have ${type.length} infractions`},
+			timestamp: new Date(),
+			color:'ORANGE'
+		}]}).catch(console.log)
+
+		
+		message.guild.members.cache.get(user.id).kick(`(${message.user.tag}) ${reasonstring}`)
+
+		message.reply({allowedMentions:{repliedUser:false},embeds:[
+			{description:`${user} has been kicked.  \`${thenewpid||"Unknown"}\``,color:'ORANGE'}
+		]})
+
+		if (setting){
+			if (setting.modlogchannel){
+				if (message.guild.channels.cache.get(setting.modlogchannel)){
+					message.guild.channels.cache.get(setting.modlogchannel).send({
+						embeds:[
+							{
+								title:`Kick`,
+								fields:[{name:'Member',value:`${user}`,inline:true},
+				{name:'Reason',value:reasonstring,inline:true},
+				{name:'Moderator',value:`${message.member}`,inline:true},
+				{name:'Punishment ID',value:`${thenewpid}`,inline:true}],
+				color:`ORANGE`,
+				timestamp:new Date()
+							}
+						]
+					}).catch(console.error)
+				}
+			}
+		}
+	}
 };

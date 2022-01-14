@@ -19,4 +19,18 @@ module.exports = {
 
 		interaction.followUp(`:ok_hand: | All infractions for ${user.tag} was cleared`)
 	},
+	prefixname: 'clearinfraction',
+	prefixdescription: 'Clears all of a user\'s infractions',
+	async prefixed(client,message,args) {
+		const finduser = require('../handlers/userfetcher')
+		const user = await finduser(client, args[0], message)||message.author
+		const inf = await infschema.findOne({_id:user.id,_guildid:message.guild.id})
+		if (!inf) return message.reply({content:':x: | User doesn\'t have any infractions.'})
+		if (!inf.type) return message.reply({content:':x: | User doesn\'t have any infractions.'})
+
+		await infschema.findOneAndRemove({_id:user.id,_guildid:message.guild.id})
+		.catch(err=>{return message.reply(`:x: | Something went wrong`)})
+
+		message.reply(`:ok_hand: | All infractions for ${user.tag} was cleared`)
+	}
 };

@@ -30,4 +30,9 @@ module.exports = {
 			interaction.followUp(`:timer: | Slowmode of \`${channel.name}\` is ${s(channel.rateLimitPerUser,{long:true})}`)
 		}
 	},
+	prefixname: 'slowmode',
+	prefixdescription: 'Changes the slowmode of a channel',
+	async prefixed(client,message,args) {
+		
+	}
 };

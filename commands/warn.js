@@ -102,4 +102,9 @@ module.exports = {
 			}
 		}
 	},
+	prefixname: 'warn',
+	prefixdescription: 'Warns a user',
+	async prefixed(client,message,args) {
+	
+	}
 };

@@ -76,4 +76,9 @@ module.exports = {
 			}
 		}
 	},
+	prefixname: 'unban',
+	prefixdescription: 'Unbans a user',
+	async prefixed(client,message,args) {
+	
+	}
 };
