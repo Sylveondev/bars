@@ -48,11 +48,11 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.on('messageCreate',async(message) => {
-	//Remove this soon. No more, thank god
-	
+	//Removed this. No more, thank god
+		return;
 		if (message.author.bot || !message.guild) return;
 
-		if (message.content == `<@!${message.guild.me.id}> slashcommands`||message.content == `<@${message.guild.me.id}> slashcommands`){
+		if (message.content == `<@!${client.user.id}> slashcommands`||message.content == `<@${client.user.id}> slashcommands`){
 			require('./deploycmds').register(message.guild.id)
 			message.reply(`${emojis.success} | Attempting to refresh slash commands`)
 		}
