@@ -10,6 +10,7 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		const user = await interaction.options.getUser('user') || interaction.member.user
+		const setting = await settingschema.findOne({_id:interaction.guild.id})
 		const inf = await infschema.findOne({ _id: user.id, _guildid: interaction.guild.id })
 		if (!inf) return interaction.followUp({ content: ':x: | User doesn\'t have any infractions.' })
 		if (!inf.type) return interaction.followUp({ content: ':x: | User doesn\'t have any infractions.' })

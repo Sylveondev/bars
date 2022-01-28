@@ -3,6 +3,8 @@ const Discord = require('discord.js')
 
 const client = new Discord.Client({intents:['GUILDS','GUILD_MESSAGES','GUILD_MEMBERS','DIRECT_MESSAGES']})
 
+const { emojis } = require('./settings.json')
+
 client.commands = new Discord.Collection();
 client.prefixcommands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -40,36 +42,20 @@ client.on('interactionCreate', async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
+		.catch(async e=>{await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true })});
 	}
 });
 
 client.on('messageCreate',async(message) => {
+	//Remove this soon. No more, thank god
+	
 		if (message.author.bot || !message.guild) return;
 
-		const prefix = "bars."
-		if (!message.content.startsWith(prefix)) return;
-
-		const args = message.content.slice(prefix.length).trim().split(/ +/)
-		const commandname = args.shift().toLowerCase()
-
-		console.log('commandname',commandname)
-
-		const command = client.commands.get(commandname);
-
 		if (message.content == `<@!${message.guild.me.id}> slashcommands`||message.content == `<@${message.guild.me.id}> slashcommands`){
-			require('../deploycmds').register(message.guild.id)
+			require('./deploycmds').register(message.guild.id)
 			message.reply(`${emojis.success} | Attempting to refresh slash commands`)
 		}
-		
-	if (!command) return;
-
-	try {
-		await command.prefixed(client,message,args);
-	} catch (error) {
-		console.error(error);
-		await message.reply({ content: 'There was an error while executing this command!'});
-	}		
 })
 
 
@@ -139,4 +125,15 @@ require("./handlers/databasehandler").connect(process.env.mongodburl,process.env
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error.message);
 	console.log("Stack",error.stack)
+	var s = require('./settings.json')
+	if (s["error-channel"]){
+	client.channels.fetch(s["error-channel"]).then(c=>{c.send(`An unhandledRejection error occured:\n\`\`\`${error.stack}\`\`\``)})
+	}
+});
+
+process.on('error', error => {
+	var s = require('./settings.json')
+	if (s["error-channel"]){
+	client.channels.fetch(s["error-channel"]).then(c=>{c.send(`An error occured:\n\`\`\`${error.stack}\`\`\``)})
+	}
 });

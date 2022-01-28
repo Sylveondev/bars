@@ -5,7 +5,7 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Ping to discord'),
 	async execute(interaction) {
-		await interaction.reply(`:ping_pong: | Pong! \`${Math.round(client.ws.ping)}\`ms`);
+		await interaction.reply(`:ping_pong: | Pong! \`${Math.round(interaction.client.ws.ping)}\`ms`);
 	},
 	prefixname: 'ping',
 	prefixdescription: 'Bot ping',

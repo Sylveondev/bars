@@ -81,7 +81,7 @@ module.exports = {
 		
 		interaction.guild.members.cache.get(user.id).timeout(null,`(${interaction.user.tag}) ${reasonstring}`)
 
-		interaction.followUp({content:'Hey you, this command is a discord beta feature, if you have suggestions, post it on bars\'s support server',embeds:[
+		interaction.followUp({embeds:[
 			{description:`${user} has been untimed out.  \`${thenewpid||"Unknown"}\``,color:'GREEN'}
 		]})
 
