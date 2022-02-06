@@ -2,7 +2,6 @@ const fs = require('fs');
 const Discord = require('discord.js')
 
 const client = new Discord.Client({intents:['GUILDS','GUILD_MESSAGES','GUILD_MEMBERS','DIRECT_MESSAGES']})
-
 const { emojis } = require('./settings.json')
 
 client.commands = new Discord.Collection();
@@ -49,7 +48,7 @@ client.on('interactionCreate', async interaction => {
 
 client.on('messageCreate',async(message) => {
 	//Removed this. No more, thank god
-		return;
+	//	return;
 		if (message.author.bot || !message.guild) return;
 
 		if (message.content == `<@!${client.user.id}> slashcommands`||message.content == `<@${client.user.id}> slashcommands`){
