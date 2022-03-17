@@ -3,6 +3,10 @@ exports.log=async(text)=>{
 	const color = leeks.colors.blue;
 	console.log(color('[INFO]')+` ${text}`)
 }
+exports.debug=async(text)=>{
+	const color = leeks.colors.blue;
+	console.log(color('[DEBUG]')+` ${text}`)
+}
 exports.success=async(text)=>{
 	const color = leeks.colors.green;
 	console.log(color('[DONE]')+` ${text}`)

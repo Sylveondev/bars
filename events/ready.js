@@ -3,14 +3,14 @@ module.exports = {
 	once: true,
 	execute(client) {
 		
-		console.log(`Ready! Logged in as ${client.user.tag}`);
+		console.log(`Ready! Logged in as ${client.user.tag} (${client.user.id})`);
 		var ms = require('ms');
 
 		// This is specifically for my disord server, since I retired spongeybot and Spongey MEE6. 
 		// Your bot won't execute these lines.
 		// I will not provide any help in getting this to work.
 		// You're on your own in figuring out how to run this.
-		if (client.user.id = "891539642246123530"){
+		if (client.user.id = "913145611774226432"){
 			require('../autoicon').run(client);
 			setInterval(async ()=>{var g = await client.guilds.fetch('891539642246123530')
 		

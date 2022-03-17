@@ -1,6 +1,6 @@
 const ms = require('ms')
 exports.run=async(client)=>{
-	return;
+	// This is code for my discord. You can try to utilize this in the ready event.
 	let guild = await client.guilds.fetch('891539642246123530')
 	let channel = await client.channels.fetch('904289755519418378')
 	let messages = await channel.messages.fetch({ limit: 100 });

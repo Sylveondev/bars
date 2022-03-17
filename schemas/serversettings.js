@@ -13,7 +13,9 @@ const serversettings = mongoose.Schema({
 		serverlogchannel: {type:String,default:null},
 		mutedrole: {type:String,default:null},
 		modrole: {type:String,default:null},
-		lockdownchannel: {type:String,default:null}
+		lockdownchannel: {type:String,default:null},
+		levelingenabled: {type:Bool,default:false},
+		leveledroles: {type: Array, default: [""]}
 })
 
 module.exports = mongoose.model('serversettings',serversettings)

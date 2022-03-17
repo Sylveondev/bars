@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js')
+const logger = require("./tools/logger")
 
 const client = new Discord.Client({intents:['GUILDS','GUILD_MESSAGES','GUILD_MEMBERS','DIRECT_MESSAGES']})
 const { emojis } = require('./settings.json')
@@ -62,6 +63,9 @@ client.login(process.env.token)
 
 exports.client = client
 
+client.on('debug',(d)=>{
+	if (require('./settings.json').debug === true) 			logger.debug(d);
+})
 
 
 

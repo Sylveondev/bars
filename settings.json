@@ -6,10 +6,11 @@
 		"warn":"<:warn:918031461817389076>",
 		"info":"<:info:918031461188251719>"
 	},
-	"clientId":"938227948341829663",
+	"clientId":"913145611774226432",
 	"ownerids":["813545145039192084"],
 	"support": "[bot server](https://discord.gg/H5d5u35ggF)",
 	"website": "[Website](https://github.com/spongeyboi/barsbot)",
 	"source-code":"[Source code](https://github.com/spongeyboi/barsbot)",
-	"error-channel":"892567804509814805"
+	"error-channel":"892567804509814805",
+	"debug": true
 }
