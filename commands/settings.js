@@ -19,6 +19,10 @@ module.exports = {
 		.addSubcommand(sub=>sub.setName('mutedrole').setDescription("Sets the muted role for muted users").addRoleOption(option=>option.setName('role').setDescription('The muted role').setRequired(true)))
 
 		.addSubcommand(sub=>sub.setName('modrole').setDescription("Sets the server's modrole, which gives them access to mod commands").addRoleOption(option=>option.setName('role').setDescription('The mod role').setRequired(true)))
+
+		.addSubcommand(sub=>sub.setName('welcomechannel').setDescription("Sets the welcome channel").addChannelOption(option=>option.setName('channel').setDescription('The welcome channel').setRequired(true)).addStringOption(option=>option.setName('text').setDescription('The welcome text').setRequired(false)))
+
+		.addSubcommand(sub=>sub.setName('goodbyechannel').setDescription("Sets the goodbye channel").addChannelOption(option=>option.setName('channel').setDescription('The goodbye channel').setRequired(true)).addStringOption(option=>option.setName('text').setDescription('The goodbye text').setRequired(false)))
 		
 		.addSubcommand(sub=>sub.setName('lockdown-channels').setDescription("Channels to lock during server lockdowb").addStringOption(option=>option.setName('channels').setDescription('List of channel ids, space to separate').setRequired(true))),
 	async execute(interaction) {
@@ -64,6 +68,18 @@ module.exports = {
 				.catch(()=>{return interaction.followUp(`${emojis.fail} | Oops, a database error occured.`)})
 				.then(()=>{return interaction.followUp(`${emojis.success} | Setting successfully updated.`)})
 			break;
+			case 'welcome-channel':
+				channel = interaction.options.getChannel('channel')
+				text = interaction.options.getString('text') || "Welcome {{member}} to the server."
+				await settingschema.findOneAndUpdate({_id:interaction.guild.id},{_id:interaction.guild.id,welcomechannel:channel.id,welcometext:text},{upsert:true})
+				.catch(()=>{return interaction.followUp(`${emojis.fail} | Oops, a database error occured.`)})
+				.then(()=>{return interaction.followUp(`${emojis.success} | Setting successfully updated.`)})
+			case 'goodbye-channel':
+				channel = interaction.options.getChannel('channel')
+				text = interaction.options.getString('text') || "{{member}} has left the server."
+				await settingschema.findOneAndUpdate({_id:interaction.guild.id},{_id:interaction.guild.id,goodbyechannel:channel.id,goodbyetext:text},{upsert:true})
+				.catch(()=>{return interaction.followUp(`${emojis.fail} | Oops, a database error occured.`)})
+				.then(()=>{return interaction.followUp(`${emojis.success} | Setting successfully updated.`)})
 			case 'lockdown-channels':
 				 channels = interaction.options.getString('channels')
 				await settingschema.findOneAndUpdate({_id:interaction.guild.id},{_id:interaction.guild.id,lockdownchannel:channels},{upsert:true})

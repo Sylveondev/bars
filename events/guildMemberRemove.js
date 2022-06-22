@@ -26,6 +26,35 @@ module.exports = {
 					}
 				]})
 			}
+			if (setting.goodbyechannel){
+				var goodbyechannel = await member.guild.channels.fetch(setting.goodbyechannel)
+				var text = await member.guild.channels.fetch(setting.goodbyetext)
+				.catch(()=>{})
+				if (goodbyechannel) {
+
+					//Now for the grusome part of filtering this.
+					var filteredtext
+
+					filteredtext = text.replace(/{{servername}}/i, member.guild.name)
+		
+					filteredtext = filteredtext.replace(/{{member}}/i, member)
+		
+					filteredtext = filteredtext.replace(/{{membertag}}/i, member.user.tag)
+		
+					filteredtext = filteredtext.replace(/{{membername}}/i, member.user.username)
+		
+					filteredtext = filteredtext.replace(/{{memberid}}/i, member.id)
+		
+					filteredtext = filteredtext.replace(/{{membercount}}/i, member.guild.memberCount)
+		
+					filteredtext = filteredtext.replace(/{{joindate}}/i, member.joinedAt.toDateString())
+		
+					filteredtext = filteredtext.replace(/{{creationdate}}/i, member.user.createdAt.toDateString())
+					
+					goodbyechannel.send(filteredtext).catch(console.error);
+				}
+				
+			}
 		}
 	},
 };

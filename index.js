@@ -2,8 +2,10 @@ const fs = require('fs');
 const Discord = require('discord.js')
 const logger = require("./tools/logger")
 
-const client = new Discord.Client({intents:['GUILDS','GUILD_MESSAGES','GUILD_MEMBERS','DIRECT_MESSAGES']})
+const client = new Discord.Client({partials:['GUILD_MEMBER','MESSAGE','CHANNEL','USER','REACTION'],disableMentions:'everyone',intents:["GUILDS","GUILD_MEMBERS","GUILD_BANS","GUILD_EMOJIS_AND_STICKERS","GUILD_INVITES","GUILD_VOICE_STATES","GUILD_PRESENCES","GUILD_MESSAGES","GUILD_MESSAGE_REACTIONS"]})
 const { emojis } = require('./settings.json')
+
+client.login(process.env.token);
 
 client.commands = new Discord.Collection();
 client.prefixcommands = new Discord.Collection();
@@ -59,7 +61,7 @@ client.on('messageCreate',async(message) => {
 })
 
 
-client.login(process.env.token)
+
 
 exports.client = client
 
@@ -122,7 +124,7 @@ app.listen(3000, () => {
 
 
 
-
+client.snipes = new Discord.Collection()
 require("./handlers/databasehandler").connect(process.env.mongodburl,process.env.mongodbusername,process.env.mongodbpassword,process.env.mongodbsource)
 
 process.on('unhandledRejection', error => {

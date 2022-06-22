@@ -9,8 +9,8 @@ module.exports = {
 		if (setting){
 			if (setting.memberlogchannel){
 				var memberlog = await member.guild.channels.fetch(setting.memberlogchannel)
-				.catch(()=>{return})
-				if (!memberlog) return;
+				.catch(()=>{})
+				if (memberlog) {
 
 				memberlog.send({embeds:[
 					{
@@ -21,7 +21,36 @@ module.exports = {
 						footer:{text:`ID: ${member.id}`},
 						timestamp:new Date()
 					}
-				]})
+				]})}
+			}
+			if (setting.welcomechannel){
+				var welcomechannel = await member.guild.channels.fetch(setting.welcomechannel)
+				var text = await member.guild.channels.fetch(setting.welcometext)
+				.catch(()=>{})
+				if (welcomechannel) {
+
+					//Now for the grusome part of filtering this.
+					var filteredtext
+
+					filteredtext = text.replace(/{{servername}}/i, member.guild.name)
+		
+					filteredtext = filteredtext.replace(/{{member}}/i, member)
+		
+					filteredtext = filteredtext.replace(/{{membertag}}/i, member.user.tag)
+		
+					filteredtext = filteredtext.replace(/{{membername}}/i, member.user.username)
+		
+					filteredtext = filteredtext.replace(/{{memberid}}/i, member.id)
+		
+					filteredtext = filteredtext.replace(/{{membercount}}/i, member.guild.memberCount)
+		
+					filteredtext = filteredtext.replace(/{{joindate}}/i, member.joinedAt.toDateString())
+		
+					filteredtext = filteredtext.replace(/{{creationdate}}/i, member.user.createdAt.toDateString())
+					
+					welcomechannel.send(filteredtext).catch(console.error);
+				}
+				
 			}
 		}
 	},
